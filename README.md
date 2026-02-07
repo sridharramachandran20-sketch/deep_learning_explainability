@@ -1,171 +1,87 @@
-Multivariate Time Series Forecasting
+# Time Series Forecasting with Deep Learning and Explainability
 
-LSTM vs Transformer vs SARIMAX
+This project focuses on **multivariate time series forecasting** using deep learning models with an emphasis on **model interpretability, robust validation, and qualitative analysis**.  
+It is designed to avoid black-box modeling by explicitly explaining *how* and *why* predictions are made.
 
-Overview
 
-This project implements and compares multiple forecasting approaches for multivariate time series data. It evaluates deep learning architectures (LSTM and Transformer) against a classical statistical model (SARIMAX) for multi-step forecasting.
+## Project Objectives
 
-The project also integrates model explainability using Integrated Gradients to interpret feature importance.
+Build deep learning models for time series forecasting  
+Compare performance with a classical **SARIMAX baseline**
+Apply **Explainable AI (XAI)** techniques to interpret model predictions  
+Use **walk-forward cross-validation** instead of a single train/test split  
+Provide detailed **architectural, validation, and qualitative analysis**
 
-Problem Statement
 
-Given past observations of a multivariate time series, predict the next 10 future time steps of the primary target variable.
+## Models Implemented
 
-The system uses:
+LSTM-based forecasting model  
+Attention-based (Transformer-inspired) model  
+SARIMAX statistical baseline  
 
-40 past time steps as input
 
-10 future time steps as output
 
-3 correlated features
-Dataset
+## Model Explainability
 
-The dataset is synthetically generated and contains:
+To ensure interpretability, the project incorporates **Explainable AI techniques**:
 
-Trend component
+### SHAP (SHapley Additive Explanations)
 
-Multiple seasonal patterns
+Measures feature contribution to each prediction  
+Identifies dominant input features across forecasting horizons  
+Helps explain model behavior beyond accuracy metrics  
 
-Correlated multivariate Gaussian noise
+Explainability is used not only for visualization but also for **model validation and error analysis**.
 
-Increasing variance over time (heteroscedasticity)
 
-Features:
+## Validation Strategy
 
-f1: Trend + Seasonality + Noise (Primary target)
+### Walk-Forward Cross-Validation
 
-f2: Scaled trend + Alternate seasonality + Noise
+Instead of a single train/test split, the project applies:
 
-f3: Combined seasonal components + Noise
+Expanding training windows  
+Sequential evaluation on future time steps  
+Multiple validation folds  
 
-Total time steps: 1500
-Notebook contains:
+This approach simulates real-world forecasting scenarios and reduces data leakage.
 
-Data generation
 
-Preprocessing
 
-Model training
+## Baseline Comparison (SARIMAX)
 
-Evaluation
+SARIMAX is used as a **classical baseline model**
+Forecasts are aligned carefully with deep learning outputs
+Feature-level limitations of SARIMAX on multivariate data are explicitly discussed
+Evaluation is performed using identical metrics for fair comparison
 
-Explainability
 
-Visualization
-Methodology
-1. Data Preprocessing
 
-MinMaxScaler normalization
+## Transformer Architecture Discussion
 
-Supervised sequence creation
+A simplified attention-based architecture is implemented  
+Attention weights are analyzed to understand temporal focus  
+Architectural trade-offs and limitations are documented  
 
-Temporal train-test split (70% train, 30% test)
-2. Models Implemented
-LSTM Model
+Note: This is not a full encoder-decoder Transformer; limitations are acknowledged and justified.
 
-Architecture:
 
-LSTM (64 units, return_sequences=True)
 
-Dropout (0.3)
+## Evaluation Metrics
 
-LSTM (32 units)
+Mean Absolute Error (MAE)  
+Root Mean Squared Error (RMSE)  
+Forecast vs actual visualization  
 
-Dense output layer (10 steps)
+Results are reported **across validation folds**, not from a single split.
 
-Strength:
 
-Captures short and mid-term dependencies.
-Transformer Model
+## Qualitative Analysis
 
-Architecture:
+The project includes:
+Justification of architectural choices  
+Interpretation of prediction errors  
+Explainability-driven insights from SHAP outputs  
+Comparative strengths and weaknesses of each model  
 
-MultiHeadAttention (4 heads)
-
-Layer Normalization
-
-Dropout
-
-Dense (ReLU)
-
-GlobalAveragePooling1D
-
-Dense output layer (10 steps)
-
-Strength:
-
-Captures long-range dependencies using attention mechanism.
-
-SARIMAX Model
-
-Configuration:
-
-Order: (2, 1, 2)
-
-Seasonal Order: (1, 1, 1, 50)
-
-Strength:
-
-Provides strong linear statistical baseline.
-Evaluation Metrics
-
-Performance is measured using:
-
-Mean Absolute Error (MAE)
-
-Root Mean Squared Error (RMSE)
-
-Metrics are calculated across all forecasted steps.
-
-Explainability
-
-Integrated Gradients is implemented for the LSTM model to compute feature importance.
-
-This helps identify which input features contribute most to the model’s predictions.
-
-Visualizations
-
-Forecast comparison (Actual vs LSTM vs Transformer)
-
-Feature importance bar chart
-Key Insights
-
-LSTM effectively models temporal patterns.
-
-Transformer handles long-range dependencies.
-
-SARIMAX provides a reliable classical benchmark.
-
-Recent time steps show higher importance in predictions.
-
-Model comparison increases forecasting confidence.
-
-Future Improvements
-
-Hyperparameter tuning
-
-Model ensembling
-
-Use real-world datasets
-
-Probabilistic forecasting
-
-Deployment using FastAPI or Flask
-
-Cross-validation for time series
-Technologies Used
-
-Python
-
-NumPy
-
-Pandas
-
-Scikit-learn
-
-Statsmodels
-
-TensorFlow / Keras
-
-Matplotlib
+Code is accompanied by **markdown analysis**, not standalone scripts.
